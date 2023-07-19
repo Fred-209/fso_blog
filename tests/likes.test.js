@@ -1,4 +1,6 @@
-const { totalLikes, blogs, favoriteBlog, mostBlogs } = require('../utils/list_helper');
+const {
+  totalLikes, blogs, favoriteBlog, mostBlogs, mostLikes,
+} = require('../utils/list_helper');
 
 describe('total likes', () => {
   const listWithOneBlog = [
@@ -38,7 +40,6 @@ describe('favorite blog', () => {
   });
 
   test('of a bigger list is calculated right', () => {
-    console.log(favoriteBlog(blogs));
     expect(favoriteBlog(blogs)).toEqual(mostLikedBlog);
   });
 });
@@ -72,6 +73,39 @@ describe('author with most blogs', () => {
     };
 
     const result = mostBlogs(blogs);
+    expect(result).toEqual(expected);
+  });
+});
+
+describe('author with most likes', () => {
+  test('when list only has one entry, return that formatted author/likes', () => {
+    const blogList = [
+      {
+        _id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        likes: 5,
+        __v: 0,
+      },
+    ];
+
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    };
+
+    const result = mostLikes(blogList);
+    expect(result).toEqual(expected);
+  });
+
+  test('of a bigger list is calculated right', () => {
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    };
+
+    const result = mostLikes(blogs);
     expect(result).toEqual(expected);
   });
 });
