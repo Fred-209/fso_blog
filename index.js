@@ -1,48 +1,49 @@
-require('dotenv').config()
-const MONGODB_URI = process.env.MONGODB_URI;
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const express = require('express');
+const cors = require('cors');
 
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
+const app = express();
+const Blog = require('./models/blog');
 
-const Blog = mongoose.model('Blog', blogSchema)
+const config = require('./utils/config');
+const logger = require('./utils/logger');
 
-mongoose.connect(MONGODB_URI);
+const connectToMongo = async (url) => {
+  try {
+    await mongoose.connect(url);
+    logger.info('connected to MongoDB');
+  } catch (error) {
+    logger.error('error connecting to MongoDB:', error.message);
+  }
+};
 
-app.use(cors())
-app.use(express.json())
+connectToMongo(config.MONGODB_URI);
+
+app.use(cors());
+app.use(express.json());
 
 app.get('/', (request, response) => {
-  response.send('Hello, world!')
-})
+  response.send('Hello, world!');
+});
 
 app.get('/api/blogs', (request, response) => {
   Blog
-  .find({})
-  .then(blogs => {
-    response.json(blogs)
-  })
-})
+    .find({})
+    .then((blogs) => {
+      response.json(blogs);
+    });
+});
 
 app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
-  
+  const blog = new Blog(request.body);
+
   blog
-  .save()
-  .then(result => {
-    response.status(201).json(result)
-  })
-})
+    .save()
+    .then((result) => {
+      response.status(201).json(result);
+    });
+});
 
-
-const PORT = process.env.PORT || 3003;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+app.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`);
+});
