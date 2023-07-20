@@ -104,6 +104,52 @@ test('has an "id" property and no "_id" property', async () => {
   expect(blog._id).toBeUndefined();
 });
 
+test('blog post without likes defaults to 0', async () => {
+  const newBlog = {
+    title: 'Test Blog',
+    author: 'Fred Durham',
+    url: 'http://www.launchschool.com',
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201);
+
+  const blogs = await helper.blogsInDb();
+  const createdBlog = blogs.find(blog => blog.title === newBlog.title);
+
+  expect(createdBlog.likes).toBe(0);
+});
+
+describe('missing properties', () => {
+  test('missing title has status 400', async () => {
+    const missingTitleBlog = {
+      url: 'http://www.launchschool.com',
+      author: 'Fred Durham',
+      likes: 22,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(missingTitleBlog)
+      .expect(400);
+  });
+
+  test('missing url has status 400', async () => {
+    const missingUrlBlog = {
+      title: 'Test Blog',
+      author: 'Fred Durham',
+      likes: 22,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(missingUrlBlog)
+      .expect(400);
+  });
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
