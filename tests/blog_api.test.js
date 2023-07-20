@@ -96,6 +96,14 @@ test('a blog can be removed', async () => {
   expect(contents).not.toContain(blogToDelete.title);
 });
 
+test('has an "id" property and no "_id" property', async () => {
+  const blogsAtStart = await helper.blogsInDb();
+  const blog = blogsAtStart[0];
+
+  expect(blog.id).toBeDefined();
+  expect(blog._id).toBeUndefined();
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
