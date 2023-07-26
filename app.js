@@ -5,6 +5,7 @@ require('express-async-errors');
 const app = express();
 const cors = require('cors');
 const blogRouter = require('./controllers/blogs');
+const usersRouter = require('./controllers/users');
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
@@ -31,6 +32,7 @@ app.get('/', (request, response) => {
   response.send('Hello, world!');
 });
 
+app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogRouter);
 
 app.use(middleware.unknownEndpoint);

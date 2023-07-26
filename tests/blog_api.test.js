@@ -117,7 +117,7 @@ test('blog post without likes defaults to 0', async () => {
     .expect(201);
 
   const blogs = await helper.blogsInDb();
-  const createdBlog = blogs.find(blog => blog.title === newBlog.title);
+  const createdBlog = blogs.find((blog) => blog.title === newBlog.title);
 
   expect(createdBlog.likes).toBe(0);
 });
