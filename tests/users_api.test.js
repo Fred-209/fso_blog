@@ -14,7 +14,7 @@ describe('when there is initially four users in db', () => {
     await User.insertMany(await helper.initialUsers);
   });
 
-   test('creation succeeds with a fresh username', async () => {
+  test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await helper.usersInDb();
 
     const newUser = {
@@ -71,7 +71,7 @@ describe('when there is initially four users in db', () => {
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/)
-      .expect(response => response.body.error === 'username and password must be at least 3 characters long');
+      .expect((response) => response.body.error === 'username and password must be at least 3 characters long');
 
     const usersAtEnd = await helper.usersInDb();
     expect(usersAtEnd.length).toEqual(usersAtStart.length);
@@ -91,7 +91,7 @@ describe('when there is initially four users in db', () => {
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/)
-      .expect(response => response.body.error === 'username and password must be at least 3 characters long');
+      .expect((response) => response.body.error === 'username and password must be at least 3 characters long');
 
     const usersAtEnd = await helper.usersInDb();
     expect(usersAtEnd.length).toEqual(usersAtStart.length);
